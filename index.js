@@ -17,12 +17,12 @@ module.exports = bundler => {
         favicon: false,
         script: { 
           resolve(node) {
-            return node.tag === 'script' && node.attrs && node.attrs.src && !node.attrs.async;
+            return node.tag === 'script' && node.attrs && node.attrs.src && !node.attrs.hasOwnProperty('async');
           }
         },
         style: {
           resolve(node) {
-            return node.tag === 'link' && node.attrs && node.attrs.rel === 'stylesheet' && node.attrs.href && node.attrs['x-inline'];
+            return node.tag === 'link' && node.attrs && node.attrs.rel === 'stylesheet' && node.attrs.href && node.attrs.hasOwnProperty('x-inline');
           }
         }
       }
