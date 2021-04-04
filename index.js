@@ -18,7 +18,14 @@ module.exports = bundler => {
         script: { 
           resolve(node) {
             return node.tag === 'script' && node.attrs && node.attrs.src && !node.attrs.async; 
-          } 
+          },
+          transform(node, data) {
+            delete node.attrs.src;
+
+            node.content = [
+              data.buffer.toString('utf8')
+            ];
+          }
         }
       }
       const result = await postHTML([posthtmlInlineAssets({ cwd, root: cwd, transforms })]).process(data);
