@@ -12,7 +12,16 @@ module.exports = bundler => {
 
       const cwd = bundle.entryAsset.options.outDir;
       const data = fs.readFileSync(bundle.name);
-      const result = await postHTML([posthtmlInlineAssets({ cwd, root: cwd, transforms: { img: false, favicon: false } })]).process(data);
+      const transforms = { 
+        image: false,
+        favicon: false,
+        script: { 
+          resolve(node) {
+            return node.tag === 'script' && node.attrs && node.attrs.src && !node.attrs.async; 
+          } 
+        }
+      }
+      const result = await postHTML([posthtmlInlineAssets({ cwd, root: cwd, transforms })]).process(data);
       fs.writeFileSync(bundle.name, result.html);
     }));
   });
